@@ -26,15 +26,25 @@
 namespace Diligent
 {
 
-ShaderBindingTableMtlImpl::ShaderBindingTableMtlImpl(IReferenceCounters*          pRefCounters,
-                                                     RenderDeviceMtlImpl*         pDevice,
-                                                     const ShaderBindingTableDesc& SBTDesc) :
-    TShaderBindingTableBase{pRefCounters, pDevice, SBTDesc}
+ShaderBindingTableMtlImpl::ShaderBindingTableMtlImpl(IReferenceCounters*           pRefCounters,
+                                                     RenderDeviceMtlImpl*          pDevice,
+                                                     const ShaderBindingTableDesc& SBTDesc,
+                                                     bool                          bIsDeviceInternal) :
+    TShaderBindingTableBase{pRefCounters, pDevice, SBTDesc, bIsDeviceInternal}
 {
 }
 
 ShaderBindingTableMtlImpl::~ShaderBindingTableMtlImpl()
 {
+}
+
+void ShaderBindingTableMtlImpl::GetData(BufferMtlImpl*& pSBTBufferMtl,
+                                        BindingTable&   RayGenShaderRecord,
+                                        BindingTable&   MissShaderTable,
+                                        BindingTable&   HitGroupTable,
+                                        BindingTable&   CallableShaderTable)
+{
+    TShaderBindingTableBase::GetData(pSBTBufferMtl, RayGenShaderRecord, MissShaderTable, HitGroupTable, CallableShaderTable);
 }
 
 } // namespace Diligent
