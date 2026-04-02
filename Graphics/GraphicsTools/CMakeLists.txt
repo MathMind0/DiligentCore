@@ -142,6 +142,7 @@ PUBLIC
     interface
 PRIVATE
     ../GraphicsEngineD3DBase/include
+    ../GraphicsEngineMetal/include
     include
 )
 
