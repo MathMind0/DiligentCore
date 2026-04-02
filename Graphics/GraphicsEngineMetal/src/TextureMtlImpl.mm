@@ -270,17 +270,36 @@ void TextureMtlImpl::CreateViewInternal(const TextureViewDesc& ViewDesc,
                                          ITextureView**         ppView,
                                          bool                   bIsDefaultView)
 {
-    // Texture view creation is handled by TextureViewMtlImpl
-    // This method should create the appropriate view based on ViewDesc
-    // For now, this is a placeholder
-    if (ppView == nullptr)
-    {
-        LOG_ERROR_MESSAGE("ppView must not be null");
-        return;
-    }
+    VERIFY(ppView != nullptr, "View pointer address is null");
+    if (!ppView) return;
+    VERIFY(*ppView == nullptr, "Overwriting reference to existing object may cause memory leaks");
     
     *ppView = nullptr;
-    LOG_ERROR_MESSAGE("CreateViewInternal is not fully implemented yet");
+    
+    try
+    {
+        TextureViewDesc UpdatedViewDesc = ViewDesc;
+        ValidatedAndCorrectTextureViewDesc(m_Desc, UpdatedViewDesc);
+        
+        TextureViewMtlImpl* pViewMtl = NEW_RC_OBJ(m_pDevice->GetTexViewObjAllocator(), 
+                                                   "TextureViewMtlImpl instance", 
+                                                   TextureViewMtlImpl,
+                                                   bIsDefaultView ? this : nullptr)
+            (m_pDevice, UpdatedViewDesc, this, bIsDefaultView);
+        
+        VERIFY(pViewMtl->GetDesc().ViewType == ViewDesc.ViewType, "Incorrect view type");
+        
+        if (bIsDefaultView)
+            *ppView = pViewMtl;
+        else
+            pViewMtl->QueryInterface(IID_TextureView, ppView);
+    }
+    catch (const std::runtime_error&)
+    {
+        const char* ViewTypeName = GetTexViewTypeLiteralName(ViewDesc.ViewType);
+        LOG_ERROR("Failed to create view '", ViewDesc.Name ? ViewDesc.Name : "", 
+                  "' (", ViewTypeName, ") for texture '", m_Desc.Name ? m_Desc.Name : "", "'");
+    }
 }
 
 } // namespace Diligent

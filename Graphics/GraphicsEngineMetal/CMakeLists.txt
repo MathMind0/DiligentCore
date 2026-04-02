@@ -24,6 +24,7 @@ set(INCLUDE
     include/DeviceMemoryMtlImpl.hpp
     include/TextureMtlImpl.hpp
     include/SparseTextureManagerMtlImpl.hpp
+    include/ShaderBindingTableMtlImpl.hpp
 )
 
 set(INTERFACE
@@ -64,6 +65,9 @@ set(SRC
     src/FenceMtlImpl.mm
     src/QueryMtlImpl.mm
     src/QueryManagerMtl.mm
+    src/BufferMtlImpl.mm
+    src/BufferViewMtlImpl.mm
+    src/SamplerMtlImpl.mm
     src/BottomLevelASMtlImpl.mm
     src/TopLevelASMtlImpl.mm
     src/RasterizationRateMapMtlImpl_Stub.mm
@@ -72,6 +76,7 @@ set(SRC
     src/TextureViewMtlImpl.mm
     src/SwapChainMtlImpl.mm
     src/SparseTextureManagerMtlImpl_Stub.mm
+    src/ShaderBindingTableMtlImpl.mm
     src/MetalUtilities/MetalTypeConversions.mm
     src/MetalUtilities/MetalDebug.mm
     src/MetalUtilities/MetalMemoryManager.mm

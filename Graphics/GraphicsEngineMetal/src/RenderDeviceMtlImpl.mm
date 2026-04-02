@@ -112,11 +112,10 @@ void DILIGENT_CALL_TYPE RenderDeviceMtlImpl::CreateRayTracingPipelineState(const
 }
 
 void DILIGENT_CALL_TYPE RenderDeviceMtlImpl::CreateBuffer(const BufferDesc& BuffDesc,
-                                                          const BufferData* pBuffData,
-                                                          IBuffer**         ppBuffer)
+                                                           const BufferData* pBuffData,
+                                                           IBuffer**         ppBuffer)
 {
-    LOG_ERROR_MESSAGE("CreateBuffer is not implemented yet. Metal backend is under development.");
-    if (ppBuffer) *ppBuffer = nullptr;
+    CreateBufferImpl(ppBuffer, BuffDesc, pBuffData);
 }
 
 void DILIGENT_CALL_TYPE RenderDeviceMtlImpl::CreateTexture(const TextureDesc& TexDesc,
@@ -252,8 +251,8 @@ void DILIGENT_CALL_TYPE RenderDeviceMtlImpl::CreateTexture(const TextureDesc& Te
         }
         
         // Create TextureMtlImpl wrapper
-        TextureMtlImpl* pTextureMtl = NEW_RC_OBJ(GetRawAllocator(), "TextureMtlImpl instance", TextureMtlImpl)
-            (GetDynamicMemoryAllocator(), this, TexDesc, pTexData);
+        TextureMtlImpl* pTextureMtl = NEW_RC_OBJ(m_TexObjAllocator, "TextureMtlImpl instance", TextureMtlImpl)
+            (m_TexViewObjAllocator, this, TexDesc, pTexData);
         
         pTextureMtl->QueryInterface(IID_Texture, reinterpret_cast<IObject**>(ppTexture));
         
@@ -272,10 +271,9 @@ void DILIGENT_CALL_TYPE RenderDeviceMtlImpl::CreateTexture(const TextureDesc& Te
 }
 
 void DILIGENT_CALL_TYPE RenderDeviceMtlImpl::CreateSampler(const SamplerDesc& SamplerDesc,
-                                                           ISampler**         ppSampler)
+                                                            ISampler**         ppSampler)
 {
-    LOG_ERROR_MESSAGE("CreateSampler is not implemented yet. Metal backend is under development.");
-    if (ppSampler) *ppSampler = nullptr;
+    CreateSamplerImpl(ppSampler, SamplerDesc);
 }
 
 void DILIGENT_CALL_TYPE RenderDeviceMtlImpl::CreateShader(const ShaderCreateInfo& ShaderCI,
